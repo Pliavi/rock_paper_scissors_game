@@ -1,76 +1,34 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:rock_paper_scissors_game/components/hand_coin.dart';
 import 'package:rock_paper_scissors_game/models/player.dart';
-import 'package:rock_paper_scissors_game/screens/choose_screen.dart';
 
 class Game {
-  Player player = Player();
-  Player computer = Player();
+  final Player player;
+  final Player computer;
 
-  // void start(BuildContext context) {
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute(builder: (_) => const ChooseScreen()),
-  //   );
-  // }
+  Game({
+    this.player = const Player(hand: null, score: 0),
+    this.computer = const Player(hand: null, score: 0),
+  });
 
-  void selectHand(PlayerHand hand) {
-    player.hand = hand;
-    computer.hand =
-        PlayerHand.values[Random().nextInt(PlayerHand.values.length)];
+  Game copyWith({
+    Player? player,
+    Player? computer,
+  }) {
+    return Game(
+      player: player ?? this.player,
+      computer: computer ?? this.computer,
+    );
   }
 
-  void updateScore(WinningState winningState) {
-    if (winningState == WinningState.player) {
-      player.score++;
-    } else if (winningState == WinningState.computer) {
-      computer.score++;
-    }
-  }
-
-  WinningState checkWinner() {
-    if (player.hand == computer.hand) {
-      return WinningState.draw;
-    }
-
-    if (player.hand == PlayerHand.rock) {
-      if (computer.hand == PlayerHand.scissors ||
-          computer.hand == PlayerHand.lizard) {
-        return WinningState.player;
-      }
-    }
-
-    if (player.hand == PlayerHand.paper) {
-      if (computer.hand == PlayerHand.rock ||
-          computer.hand == PlayerHand.spock) {
-        return WinningState.player;
-      }
-    }
-
-    if (player.hand == PlayerHand.scissors) {
-      if (computer.hand == PlayerHand.paper ||
-          computer.hand == PlayerHand.lizard) {
-        return WinningState.player;
-      }
-    }
-
-    if (player.hand == PlayerHand.lizard) {
-      if (computer.hand == PlayerHand.spock ||
-          computer.hand == PlayerHand.paper) {
-        return WinningState.player;
-      }
-    }
-
-    if (player.hand == PlayerHand.spock) {
-      if (computer.hand == PlayerHand.scissors ||
-          computer.hand == PlayerHand.rock) {
-        return WinningState.player;
-      }
-    }
-
-    return WinningState.computer;
-  }
+  static const Map<Hand, List<Hand>> handWins = {
+    Hand.rock: [Hand.scissors, Hand.lizard],
+    Hand.paper: [Hand.rock, Hand.spock],
+    Hand.scissors: [Hand.paper, Hand.lizard],
+    Hand.lizard: [Hand.paper, Hand.spock],
+    Hand.spock: [Hand.scissors, Hand.rock],
+  };
 }
 
 enum WinningState { player, computer, draw }

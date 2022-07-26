@@ -3,9 +3,9 @@ import 'package:rock_paper_scissors_game/constants/colors.dart';
 
 class ScoreBoard extends StatelessWidget {
   const ScoreBoard({
-    Key? key,
+    super.key,
     required this.score,
-  }) : super(key: key);
+  });
 
   final int score;
 

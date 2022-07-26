@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rock_paper_scissors_game/components/hand_coin.dart';
 import 'package:rock_paper_scissors_game/constants/colors.dart';
-import 'package:rock_paper_scissors_game/controllers/game.dart';
 import 'package:rock_paper_scissors_game/screens/choose_screen.dart';
 
 void main() {
-  // TODO use change notifier, this one will lead to a non resetable game
-  Game game = Game();
-
-  runApp(MyApp(game));
+  runApp(
+    const ProviderScope(child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp(this.game, {Key? key}) : super(key: key);
-
-  final Game game;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +39,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: ChooseScreen(game),
+      home: const ChooseScreen(),
     );
   }
 }

@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rock_paper_scissors_game/constants/colors.dart';
 
-class PlayerHandCoin extends StatelessWidget {
-  const PlayerHandCoin({
+class HandCoin extends StatelessWidget {
+  const HandCoin({
     super.key,
     this.playerHand,
     required this.onClick,
     this.scale = 1,
     this.won = false,
     this.title,
+    this.enemyTag = false,
   });
 
-  final void Function()? onClick;
-  final PlayerHand? playerHand;
+  final void Function(Hand hand)? onClick;
+  final Hand? playerHand;
   final double scale;
   final bool won;
   final String? title;
+  final bool enemyTag;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class PlayerHandCoin extends StatelessWidget {
               : MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
-                    onTap: onClick,
+                    onTap: onClick != null ? () => onClick!(playerHand!) : null,
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -114,13 +116,13 @@ class PlayerHandCoin extends StatelessWidget {
     return playerHand == null
         ? coin
         : Hero(
-            tag: playerHand!.name,
+            tag: '${playerHand!.name}${enemyTag ? '-enemy' : null}',
             child: coin,
           );
   }
 }
 
-enum PlayerHand {
+enum Hand {
   paper(
     'assets/images/icon-paper.svg',
     CColors.paperGradient,
@@ -151,7 +153,7 @@ enum PlayerHand {
   final LinearGradient gradient;
   final Color shadowColor;
 
-  const PlayerHand(
+  const Hand(
     this.icon,
     this.gradient,
     this.shadowColor,
